@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Luka-gpt 💬</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            max-width: 600px;
+            background-color: #0f0;
+            font-family: Times, serif;
+            margin: 0;
+        }
+        .container-reponse {
+            max-width: 320px;
+            height: 218px;
+            background-color: #ddd;
+            border: 2px solid #0000ff;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column; 
+            justify-content: flex-start;
+            align-items: flex-start;
+            text-align: left;
+            color: #000; 
+            position: relative; 
+            padding: 10px;
+            margin: 0 15px 30px;
+            overflow-y: auto;
+        }
+        .name {
+            color: #000;
+            text-align: center;
+            font-weight: bold;
+            font-size: 170%;
+            padding: 10px; 
+            text-decoration: underline;
+        }
+        .question {
+            font-family: Times, serif;
+            text-align: center;
+            color: #000;
+            background-color: #ffff00;
+            border: 1px solid #0000ff;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 10px 10px 25px;
+        }
+        .envoyer {
+            color: #fff;
+            background-color: #ffa500;
+            border: 2px solid #ffa500;
+            border-radius: 7px;
+            cursor: pointer;
+            padding: 5px;
+            margin: 10px;
+            font-family: Times, serif;
+        }
+        .message-bot { 
+            max-width: 450px;
+            color: #000;
+            background-color: #CCCDD6;
+            border: 1px solid #0000ff;
+            border-radius: 10px;
+            padding: 10px;
+            padding-right: 31px;
+            margin-right: 5px;
+            margin-top: 0;
+            margin-left: 10px;
+            font-family: Arial, sans-serif;
+            margin-bottom: 10px;}
+        .user-message {
+            background-color: #ffa500; 
+            max-width: 450px;
+            color: #000;
+            border: 1px solid #0000ff;
+            border-radius: 10px;
+            padding: 10px;
+            margin-right: 5px;
+            margin-top: 0;
+            margin-left: 10px;
+            font-family: Arial, sans-serif;
+            margin-bottom: 10px; 
+        }
+        .g {
+            color: #000;
+            font-family: Times, serif;
+            text-indent: 10pt;
+        }
+        .g::before {
+            content: "GPT :";
+            color: #ffa500;
+            font-weight: bold;
+        }
+        .copie {
+            color: #000;
+            width: 264px;
+            height: 8px;
+            background-color: #ddd;
+            text-align: right;
+            border: 2px solid #0000ff;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 30px 15px 0; 
+            display: flex;
+            justify-content: center;
+        }
+        .option {
+            padding: 10px;
+            font-family: Times, serif;
+        }
+        .select {
+            background-color: #ffa500;
+            border-radius: 9px;
+            border: 1px solid #ffa500;
+            padding: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="name">GPT-4</h1>
+    <p class="g"> Votre outil de recherche&nbsp;!</p><br>
+    <div class="option">
+        <table border="0">
+            <tr>
+                <td>Aide : </td>
+                <td>
+                    <select class="select">
+                        <option value="Options">Options</option>
+                        <option value="Jouer à un jeu"><a href="https://game-sf9f.onrender.com/" target="_blank">Jouer à un jeu</a></option>
+                        <option value="me joindre">Me joindre</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="container-reponse"> 
+        <div class="message-bot">Bonjour comment puis-je t'aider&nbsp;!</div>
+    </div>
+    <input type="text" class="question" placeholder="Ta question">
+    <button class="envoyer">Envoyer</button> 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const questionInput = document.querySelector('.question');
+            const envoyerButton = document.querySelector('.envoyer');
+            const containerReponse = document.querySelector('.container-reponse');
+
+            envoyerButton.addEventListener('click', async function() {
+                const userInput = questionInput.value.trim();
+                if (!userInput) {
+                    alert("Veuillez entrer une question.");
+                    return;
+                }
+
+                // Réinitialiser l'entrée de question
+                questionInput.value = '';
+
+                // Afficher le message de l'utilisateur
+                const userMessage = document.createElement('div');
+                userMessage.className = 'user-message';
+                userMessage.textContent = userInput;
+                containerReponse.appendChild(userMessage);
+
+                try {
+                    // Remplacez 'https://example.com/api/hercai' et 'yourModel' par les valeurs appropriées
+                    const response = await fetch(`https://metoushela-api.vercel.app/gpt4o?context=${encodeURIComponent(prompt)}`, {
+                        method: 'GET',
+                    });
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération des données.');
+                    }
+
+                    const data = await response.json();
+                    const botMessage = data.response; // Assurez-vous que 'response' est la clé correcte pour la réponse
+                    const messageBot = document.createElement('div');
+                    messageBot.className = 'message-bot';
+                    messageBot.textContent = botMessage;
+                    containerReponse.appendChild(messageBot);
+
+                } catch (error) {
+                    console.error('Erreur:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html
